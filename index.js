@@ -1,8 +1,11 @@
+// ref: https://www.youtube.com/watch?v=pKd0Rpw7O48&ab_channel=ProgrammingwithMosh
+
 const express = require('express');
 
 const fs = require('fs');
 
 const bodyParser = require('body-parser');
+const talkers = require('./talker.json');
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,6 +25,12 @@ app.get('/talker', (req, res) => {
    res.status(HTTP_OK_STATUS).json(talker);
   });
  });
+
+ app.get('/talker/:id', (req, res) => {
+  const talkerID = talkers.find((t) => t.id === parseInt(req.params.id, 10));
+  if (!talkerID) return res.status(404).send({ message: 'Pessoa palestrante não encontrada' });
+  res.status(HTTP_OK_STATUS).json(talkerID);
+});
 
 app.listen(PORT, () => {
   console.log('Online');
