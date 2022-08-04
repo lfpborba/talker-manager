@@ -7,6 +7,8 @@ const crypto = require('crypto');
 const talkers = require('./talker.json');
 
 const { validateEmail, validatePassword } = require('./middlewares/loginValidations.js');
+const { validateToken, validateName, validateAge, validateTalk, validateWatchedAt, validateRate,
+} = require('./middlewares/talkerValidations.js');
 
 const app = express();
 app.use(bodyParser.json());
@@ -38,6 +40,19 @@ app.post('/login', validateEmail, validatePassword, (req, res) => {
   const token = crypto.randomBytes(8).toString('hex');
   const { email, password } = req.body;
   res.status(HTTP_OK_STATUS).send({ email, password, token });
+});
+
+app.post('/talker', validateToken, validateName, validateAge, validateTalk, validateWatchedAt,
+validateRate, (req, res) => {
+  const data = fs.readFileSync('./talker.json', 'utf8');
+  const talker = JSON.parse(data);
+  const { name, age, talk } = req.body;
+  const { watchedAt, rate } = talk;
+  const id = talker.length + 1;
+  const newTalker = { id, name, age, talk: { watchedAt, rate } };
+  talker.push(newTalker);
+  fs.writeFileSync('./talker.json', JSON.stringify(talker));
+  return res.status(201).json(newTalker);
 });
 
 app.listen(PORT, () => {
