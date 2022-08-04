@@ -1,12 +1,12 @@
 // ref: https://www.youtube.com/watch?v=pKd0Rpw7O48&ab_channel=ProgrammingwithMosh
 
 const express = require('express');
-
 const fs = require('fs');
-
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const talkers = require('./talker.json');
+
+const { validateEmail, validatePassword } = require('./middlewares/loginValidations.js');
 
 const app = express();
 app.use(bodyParser.json());
@@ -25,17 +25,19 @@ app.get('/talker', (req, res) => {
    if (err) return res.status(404).json(talker);
    res.status(HTTP_OK_STATUS).json(talker);
   });
- });
-
- app.get('/talker/:id', (req, res) => {
-  const talkerID = talkers.find((t) => t.id === parseInt(req.params.id, 10));
+});
+ 
+app.get('/talker/:id', (req, res) => {
+  const { id } = req.params;
+  const talkerID = talkers.find((t) => t.id === Number(id));
   if (!talkerID) return res.status(404).send({ message: 'Pessoa palestrante não encontrada' });
   res.status(HTTP_OK_STATUS).json(talkerID);
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', validateEmail, validatePassword, (req, res) => {
   const token = crypto.randomBytes(8).toString('hex');
-  res.status(200).json({ token });
+  const { email, password } = req.body;
+  res.status(HTTP_OK_STATUS).send({ email, password, token });
 });
 
 app.listen(PORT, () => {
