@@ -4,6 +4,7 @@ const express = require('express');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
+const getTalker = require('./talker.json');
 
 const { validateEmail, validatePassword } = require('./middlewares/loginValidations.js');
 const { validateToken, validateName, validateAge, validateTalk, validateWatchedAt, validateRate,
@@ -14,15 +15,15 @@ app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
-const PATH = require('./talker.json');
+const PATH_file = './talker.json';
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/talker', (req, res) => {
-  fs.readFile('./talker.json', (err, data) => {
+app.get('/talker', (_req, res) => {
+  fs.readFile(PATH_file, (err, data) => {
    const talker = JSON.parse(data);
    if (err) return res.status(404).json(talker);
    res.status(HTTP_OK_STATUS).json(talker);
@@ -31,7 +32,7 @@ app.get('/talker', (req, res) => {
  
 app.get('/talker/:id', (req, res) => {
   const { id } = req.params;
-  const talkerID = PATH.find((t) => t.id === Number(id));
+  const talkerID = getTalker.find((t) => t.id === Number(id));
   if (!talkerID) return res.status(404).send({ message: 'Pessoa palestrante não encontrada' });
   res.status(HTTP_OK_STATUS).json(talkerID);
 });
