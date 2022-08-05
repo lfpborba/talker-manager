@@ -73,6 +73,15 @@ validateRate, (req, res) => {
   return res.status(HTTP_OK_STATUS).send(newTalker);
 });
 
+app.delete('/talker/:id', validateToken, (req, res) => {
+    const data = fs.readFileSync(pathTalker, 'utf8');
+    const talkers = JSON.parse(data);
+    const { id } = req.params;
+    const talkersList = talkers.filter((pers) => pers.id !== Number(id));
+    fs.writeFileSync('talker.json', JSON.stringify(talkersList));
+    res.status(204).end();
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
