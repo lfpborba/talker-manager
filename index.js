@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
-const PATH_file = './talker.json';
+const pathTalker = './talker.json';
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
@@ -23,7 +23,7 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/talker', (_req, res) => {
-  fs.readFile(PATH_file, (err, data) => {
+  fs.readFile(pathTalker, (err, data) => {
    const talker = JSON.parse(data);
    if (err) return res.status(404).json(talker);
    res.status(HTTP_OK_STATUS).json(talker);
@@ -45,7 +45,7 @@ app.post('/login', validateEmail, validatePassword, (req, res) => {
 
 app.post('/talker', validateToken, validateName, validateAge, validateTalk, validateWatchedAt,
 validateRate, (req, res) => {
-  const data = fs.readFileSync('./talker.json', 'utf8');
+  const data = fs.readFileSync(pathTalker, 'utf8');
   const talker = JSON.parse(data);
   const { name, age, talk } = req.body;
   const { watchedAt, rate } = talk;
@@ -58,7 +58,7 @@ validateRate, (req, res) => {
 
 app.put('/talker/:id', validateToken, validateName, validateAge, validateTalk, validateWatchedAt,
 validateRate, (req, res) => {
-  const data = fs.readFileSync('./talker.json', 'utf8');
+  const data = fs.readFileSync(pathTalker, 'utf8');
   const talker = JSON.parse(data);
   const { id } = req.params;
   const { name, age, talk } = req.body;
@@ -68,7 +68,7 @@ validateRate, (req, res) => {
   
   talkerID.push(newTalker);
 
-  fs.writeFileSync('./talker.json', JSON.stringify(talkerID));
+  fs.writeFileSync(pathTalker, JSON.stringify(talkerID));
 
   return res.status(HTTP_OK_STATUS).send(newTalker);
 });
