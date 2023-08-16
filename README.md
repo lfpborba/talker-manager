@@ -1,10 +1,10 @@
-# :construction: README em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto.
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+# 💻 Projeto
+Aplicação de cadastro de talkers (palestrantes) em que é possível cadastrar, visualizar, pesquisar, editar e excluir informações.
+# 🚀 Tecnologias
+Este projeto foi desenvolvido com as seguintes tecnologias:
+-	Node.js
+-	Docker
+# 📌 Habilidades
+Neste projeto, desenvolvi as seguintes habilidades:
+-	Desenvolver uma API de um CRUD (Create, Read, Update e Delete);
+-	Desenvolver endpoints para ler e escrever em um arquivo utilizando o módulo fs.
